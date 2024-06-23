@@ -1,6 +1,10 @@
 #include <iostream>
 #include <set>
-#include <vector>
+
+std::set<char> getSetAsMatrix(std::set<char> board[], int row, int col) {
+    using namespace std;
+    return board[row * 9 + col];
+}
 
 int main(int argc, char **argv) {
     using namespace std;
@@ -52,7 +56,96 @@ int main(int argc, char **argv) {
 
     fclose(file);
 
-    // TODO: Optimize the board
+    // Optimize the rows
+    int rowPreviousKnownVals = 0;
+    while (true) {
+        for (int rowIdx = 0; rowIdx < 9; rowIdx++) {
+            set<char> knownValSet = set<char>();
+
+            // Find known characters and add it to the list
+            for (int colIdx = 0; colIdx < 9; colIdx++) {
+                set<char> piece = getSetAsMatrix(board, rowIdx, colIdx);
+                if (piece.size() != 1) {
+                    continue;
+                }
+
+                for (char ch : piece) {
+                    knownValSet.insert(ch);
+                }
+            }
+
+            // Go through column and remove the known values
+            for (char knownVal : knownValSet) {
+                for (int colIdx = 0; colIdx < 9; colIdx++) {
+                    set<char> piece = getSetAsMatrix(board, rowIdx, colIdx);
+                    if (piece.size() == 1) {
+                        continue;
+                    }
+
+                    piece.erase(knownVal);
+                }
+            }
+        }
+
+        int currentKnownVals = 0;
+        for (set<char> piece : board) {
+            if (piece.size() == 1) {
+                currentKnownVals++;
+            }
+        }
+
+        if (currentKnownVals == rowPreviousKnownVals) {
+            break;
+        }
+
+        rowPreviousKnownVals = currentKnownVals;
+    }
+    // Optimize the cols
+    int colPreviousKnownVals = 0;
+    while (true) {
+        for (int colIdx = 0; colIdx < 9; colIdx++) {
+            set<char> knownValSet = set<char>();
+
+            // Find known characters and add it to the list
+            for (int rowIdx = 0; rowIdx < 9; rowIdx++) {
+                set<char> piece = getSetAsMatrix(board, rowIdx, colIdx);
+                if (piece.size() != 1) {
+                    continue;
+                }
+
+                for (char ch : piece) {
+                    knownValSet.insert(ch);
+                }
+            }
+
+            // Go through rows and remove the known values
+            for (char knownVal : knownValSet) {
+                for (int rowIdx = 0; rowIdx < 9; rowIdx++) {
+                    set<char> piece = getSetAsMatrix(board, rowIdx, colIdx);
+                    if (piece.size() == 1) {
+                        continue;
+                    }
+
+                    piece.erase(knownVal);
+                }
+            }
+        }
+
+        int currentKnownVals = 0;
+        for (set<char> piece : board) {
+            if (piece.size() == 1) {
+                currentKnownVals++;
+            }
+        }
+
+        if (currentKnownVals == colPreviousKnownVals) {
+            break;
+        }
+
+        colPreviousKnownVals = currentKnownVals;
+    }
+
+    // TODO: Optimize the sub boards
 
     // TODO: Use backtracking algorithm
 
