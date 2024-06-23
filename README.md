@@ -1,5 +1,5 @@
 ## Sudoku Solver
-Solves sudoku board using backtracking algorithm, written in C++.
+Solves sudoku board using backtracking algorithm, written in C++. The test board is solved in 28ms.
 
 To run the application, you need the unsolved board to look like input.txt file where X represents an unknown value,
 while the numbers represent the known values. Once you have that:
