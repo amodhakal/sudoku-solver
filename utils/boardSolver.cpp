@@ -1,27 +1,20 @@
+/**
+    @file boardSolver.cpp
+    @author Amodh Dhakal
+
+    Includes definitions for functions required to solve the board
+ */
+
 #include "boardSolver.hpp"
 
 using namespace std;
 
-bool hasSudokuSolved(char charBoard[], vector<set<char>> &possiblePieces, int index) {
-    if (index == 81) {
-        return true;
-    }
-
-    if (charBoard[index] != 'X') {
-        return hasSudokuSolved(charBoard, possiblePieces, index + 1);
-    }
-
-    for (char ch : possiblePieces[index]) {
-        charBoard[index] = ch;
-        if (isValidPiece(charBoard, index) && hasSudokuSolved(charBoard, possiblePieces, index + 1)) {
-            return true;
-        }
-        charBoard[index] = 'X';
-    }
-
-    return false;
-}
-
+/**
+    Verifies whether a board piece is a valid board piece for that location
+    @param charBoard is the board where the board piece is
+    @param index is the location of the board piece
+    @return true if the number of the board piece is valid, false otherwise
+ */
 bool isValidPiece(char charBoard[], int index) {
     // Check row
     int row = index / 9;
@@ -76,4 +69,31 @@ bool isValidPiece(char charBoard[], int index) {
     }
 
     return true;
+}
+
+/**
+   Tries to solve the sudoku board using a backtracking algorithm
+   @param charBoard is the board being solved
+   @param possiblePieces is the possible pieces each board piece could be
+   @param index is the current index that is being solved
+   @return true if board is solved, false otherwise
+ */
+bool hasSudokuSolved(char charBoard[], vector<set<char>> &possiblePieces, int index) {
+    if (index == 81) {
+        return true;
+    }
+
+    if (charBoard[index] != 'X') {
+        return hasSudokuSolved(charBoard, possiblePieces, index + 1);
+    }
+
+    for (char ch : possiblePieces[index]) {
+        charBoard[index] = ch;
+        if (isValidPiece(charBoard, index) && hasSudokuSolved(charBoard, possiblePieces, index + 1)) {
+            return true;
+        }
+        charBoard[index] = 'X';
+    }
+
+    return false;
 }
