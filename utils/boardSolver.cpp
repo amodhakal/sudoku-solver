@@ -13,10 +13,8 @@ bool hasSudokuSolved(char charBoard[], vector<set<char>> &possiblePieces, int in
 
     for (char ch : possiblePieces[index]) {
         charBoard[index] = ch;
-        if (isValidPiece(charBoard, index)) {
-            if (hasSudokuSolved(charBoard, possiblePieces, index + 1)) {
-                return true;
-            }
+        if (isValidPiece(charBoard, index) && hasSudokuSolved(charBoard, possiblePieces, index + 1)) {
+            return true;
         }
         charBoard[index] = 'X';
     }
@@ -31,9 +29,10 @@ bool isValidPiece(char charBoard[], int index) {
     set<char> rowChars;
     for (int rowIndex = startingRowIdx; rowIndex < startingRowIdx + 9; rowIndex++) {
         char ch = charBoard[rowIndex];
-        if (ch == 'X' || ch == '\0')
+        if (ch == 'X' || ch == '\0') {
             continue;
-        if (rowChars.find(ch) != rowChars.end()) {
+        }
+        if (rowChars.contains(ch)) {
             return false;
         }
         rowChars.insert(ch);
@@ -44,18 +43,22 @@ bool isValidPiece(char charBoard[], int index) {
     set<char> colChars;
     for (int colIndex = col; colIndex < 81; colIndex += 9) {
         char ch = charBoard[colIndex];
-        if (ch == 'X' || ch == '\0')
+        if (ch == 'X' || ch == '\0') {
             continue;
-        if (colChars.find(ch) != colChars.end()) {
+        }
+        if (colChars.contains(ch)) {
             return false;
         }
         colChars.insert(ch);
     }
 
     // Check sub board
+    //* Don't optimize the places becauses we are multpying and dividing by the same numbers
+    //* Optimizing would break the code, because we depending on integer division giving an integer
     int rowPlace = (index / 27) * 27;
-    int colPlace = ((index % 9) / 3) * 3;
+    int colPlace = ((col) / 3) * 3;
     int startingIndex = rowPlace + colPlace;
+
     int indexesList[9] = {startingIndex,      startingIndex + 1,  startingIndex + 2,
                           startingIndex + 9,  startingIndex + 10, startingIndex + 11,
                           startingIndex + 18, startingIndex + 19, startingIndex + 20};
@@ -63,9 +66,10 @@ bool isValidPiece(char charBoard[], int index) {
     set<char> subChars;
     for (int charIndex : indexesList) {
         char ch = charBoard[charIndex];
-        if (ch == 'X' || ch == '\0')
+        if (ch == 'X' || ch == '\0') {
             continue;
-        if (subChars.find(ch) != subChars.end()) {
+        }
+        if (subChars.contains(ch)) {
             return false;
         }
         subChars.insert(ch);

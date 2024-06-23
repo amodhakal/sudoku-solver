@@ -1,4 +1,5 @@
 #include "ioManager.hpp"
+#include <cstdio>
 #include <iostream>
 
 using namespace std;
@@ -24,6 +25,7 @@ void getBoardFromFile(int argc, char **argv, char *board, vector<set<char>> &pos
         }
         if (ch == EOF) {
             cerr << "Unexpected EOF encountered" << endl;
+            fclose(file);
             exit(1);
         }
         if ('1' <= ch && ch <= '9') {
@@ -41,6 +43,7 @@ void getBoardFromFile(int argc, char **argv, char *board, vector<set<char>> &pos
             continue;
         }
         cerr << "Unexpected character encountered: " << ch << endl;
+        fclose(file);
         exit(1);
     }
     fclose(file);
