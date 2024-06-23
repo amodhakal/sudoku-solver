@@ -1,6 +1,7 @@
 solver:
-	g++ -Wall -std=c++20 solver.cpp -o solver
+	g++ -Wall -std=c++20 utils/boardSolver.cpp utils/ioManager.cpp solver.cpp -o solver
 test:
+	rm -rf solver
 	make solver
-	./solver input.txt > output.txt
-	diff output.txt expected.txt
+	./solver resources/input.txt > output.txt
+	diff output.txt resources/expected.txt
