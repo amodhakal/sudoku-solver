@@ -1,11 +1,6 @@
 #include <iostream>
 #include <set>
 
-std::set<char> getSetAsMatrix(std::set<char> board[], int row, int col) {
-    using namespace std;
-    return board[row * 9 + col];
-}
-
 int main(int argc, char **argv) {
     using namespace std;
 
@@ -45,7 +40,15 @@ int main(int argc, char **argv) {
 
         if (ch == 'X') {
             set<char> possiblePieces = set<char>();
-            possiblePieces.insert(ch);
+            possiblePieces.insert('1');
+            possiblePieces.insert('2');
+            possiblePieces.insert('3');
+            possiblePieces.insert('4');
+            possiblePieces.insert('5');
+            possiblePieces.insert('6');
+            possiblePieces.insert('7');
+            possiblePieces.insert('8');
+            possiblePieces.insert('9');
             board[readerIndex++] = possiblePieces;
             continue;
         }
@@ -64,7 +67,7 @@ int main(int argc, char **argv) {
 
             // Find known characters and add it to the list
             for (int colIdx = 0; colIdx < 9; colIdx++) {
-                set<char> piece = getSetAsMatrix(board, rowIdx, colIdx);
+                set<char> piece = board[rowIdx * 9 + colIdx];
                 if (piece.size() != 1) {
                     continue;
                 }
@@ -77,12 +80,11 @@ int main(int argc, char **argv) {
             // Go through column and remove the known values
             for (char knownVal : knownValSet) {
                 for (int colIdx = 0; colIdx < 9; colIdx++) {
-                    set<char> piece = getSetAsMatrix(board, rowIdx, colIdx);
-                    if (piece.size() == 1) {
+                    if (board[rowIdx * 9 + colIdx].size() == 1) {
                         continue;
                     }
 
-                    piece.erase(knownVal);
+                    board[rowIdx * 9 + colIdx].erase(knownVal);
                 }
             }
         }
@@ -108,7 +110,7 @@ int main(int argc, char **argv) {
 
             // Find known characters and add it to the list
             for (int rowIdx = 0; rowIdx < 9; rowIdx++) {
-                set<char> piece = getSetAsMatrix(board, rowIdx, colIdx);
+                set<char> piece = board[rowIdx * 9 + colIdx];
                 if (piece.size() != 1) {
                     continue;
                 }
@@ -121,12 +123,11 @@ int main(int argc, char **argv) {
             // Go through rows and remove the known values
             for (char knownVal : knownValSet) {
                 for (int rowIdx = 0; rowIdx < 9; rowIdx++) {
-                    set<char> piece = getSetAsMatrix(board, rowIdx, colIdx);
-                    if (piece.size() == 1) {
+                    if (board[rowIdx * 9 + colIdx].size() == 1) {
                         continue;
                     }
 
-                    piece.erase(knownVal);
+                    board[rowIdx * 9 + colIdx].erase(knownVal);
                 }
             }
         }
@@ -148,6 +149,14 @@ int main(int argc, char **argv) {
     // TODO: Optimize the sub boards
 
     // TODO: Use backtracking algorithm
+
+    // for (set<char> piece : board) {
+    //     for (char ch : piece) {
+    //         cout << ch << " ";
+    //     }
+
+    //     cout << "\n";
+    // }
 
     // Print the board
     int printerIndex = 0;
