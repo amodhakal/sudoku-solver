@@ -1,5 +1,5 @@
 solver:
-	g++ -Wall -std=c++20 utils/ioManager.cpp solver.cpp -o solver
+	g++ -Wall -std=c++20 utils/boardSolver.cpp utils/ioManager.cpp solver.cpp -o solver
 test:
 	rm -rf solver
 	make solver
