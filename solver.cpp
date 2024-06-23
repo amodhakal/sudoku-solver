@@ -1,3 +1,5 @@
+#include "utils/ioManager.hpp"
+
 #include <iostream>
 #include <set>
 #include <vector>
@@ -77,49 +79,10 @@ bool solveSudoku(char charBoard[], vector<set<char>> &possiblePieces, int index)
 }
 
 int main(int argc, char **argv) {
-    if (argc != 2) {
-        cerr << "usage: ./solve [input-file]" << endl;
-        return 1;
-    }
-
-    char *filename = argv[1];
-    FILE *file = fopen(filename, "r");
-    if (!file) {
-        cerr << "Unable to open file: " << filename << endl;
-        return 1;
-    }
-
     // Initialize the board and possible pieces
     char board[81];
     vector<set<char>> possiblePieces(81);
-    int readerIndex = 0;
-    while (readerIndex < 81) {
-        char ch = fgetc(file);
-        if (ch == '\n' || ch == ' ') {
-            continue;
-        }
-        if (ch == EOF) {
-            cerr << "Unexpected EOF encountered" << endl;
-            return 1;
-        }
-        if ('1' <= ch && ch <= '9') {
-            board[readerIndex] = ch;
-            possiblePieces[readerIndex].insert(ch);
-            readerIndex++;
-            continue;
-        }
-        if (ch == 'X') {
-            board[readerIndex] = 'X';
-            for (char num = '1'; num <= '9'; num++) {
-                possiblePieces[readerIndex].insert(num);
-            }
-            readerIndex++;
-            continue;
-        }
-        cerr << "Unexpected character encountered: " << ch << endl;
-        return 1;
-    }
-    fclose(file);
+    getBoardFromFile(argc, argv, board, possiblePieces);
 
     // Solve the Sudoku
     if (solveSudoku(board, possiblePieces, 0)) {
