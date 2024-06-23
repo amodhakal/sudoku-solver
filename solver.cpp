@@ -146,17 +146,86 @@ int main(int argc, char **argv) {
         colPreviousKnownVals = currentKnownVals;
     }
 
-    // TODO: Optimize the sub boards
+    // Optimize the sub boards
+    int subPreviousKnownVals = 0;
+    while (true) {
+        for (int subIdx = 0; subIdx < 81; subIdx += 3) {
+            int rowPlace = subIdx / 27;
+            int colPlace = (subIdx % 9) / 3;
+
+            int startingIndex = 0;
+            switch (rowPlace) {
+            case 0:
+                startingIndex += 0;
+                break;
+            case 1:
+                startingIndex += 27;
+                break;
+            default:
+                startingIndex += 54;
+                break;
+            }
+
+            switch (colPlace) {
+            case 0:
+                startingIndex += 0;
+                break;
+            case 1:
+                startingIndex += 3;
+                break;
+            default:
+                startingIndex += 6;
+                break;
+            }
+
+            int indexesList[9] = {
+                startingIndex,      startingIndex + 1,  startingIndex + 2,
+                startingIndex + 9,  startingIndex + 10, startingIndex + 11,
+                startingIndex + 18, startingIndex + 19, startingIndex + 20};
+
+            for (int index : indexesList) {
+                set<char> knownValSet = set<char>();
+
+                // Find known characters and add it to the list
+                for (int rowIdx = 0; rowIdx < 9; rowIdx++) {
+                    set<char> piece = board[index];
+                    if (piece.size() != 1) {
+                        continue;
+                    }
+
+                    for (char ch : piece) {
+                        knownValSet.insert(ch);
+                    }
+                }
+
+                // Go through rows and remove the known values
+                for (char knownVal : knownValSet) {
+                    for (int rowIdx = 0; rowIdx < 9; rowIdx++) {
+                        if (board[index].size() == 1) {
+                            continue;
+                        }
+
+                        board[index].erase(knownVal);
+                    }
+                }
+            }
+        }
+
+        int currentKnownVals = 0;
+        for (set<char> piece : board) {
+            if (piece.size() == 1) {
+                currentKnownVals++;
+            }
+        }
+
+        if (currentKnownVals == subPreviousKnownVals) {
+            break;
+        }
+
+        subPreviousKnownVals = currentKnownVals;
+    }
 
     // TODO: Use backtracking algorithm
-
-    // for (set<char> piece : board) {
-    //     for (char ch : piece) {
-    //         cout << ch << " ";
-    //     }
-
-    //     cout << "\n";
-    // }
 
     // Print the board
     int printerIndex = 0;
