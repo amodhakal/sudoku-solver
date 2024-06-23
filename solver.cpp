@@ -56,19 +56,19 @@ bool isValidPiece(char charBoard[], int index) {
     return true;
 }
 
-bool solveSudoku(char charBoard[], vector<set<char>> &possiblePieces, int index) {
+bool hasSudokuSolved(char charBoard[], vector<set<char>> &possiblePieces, int index) {
     if (index == 81) {
         return true;
     }
 
     if (charBoard[index] != 'X') {
-        return solveSudoku(charBoard, possiblePieces, index + 1);
+        return hasSudokuSolved(charBoard, possiblePieces, index + 1);
     }
 
     for (char ch : possiblePieces[index]) {
         charBoard[index] = ch;
         if (isValidPiece(charBoard, index)) {
-            if (solveSudoku(charBoard, possiblePieces, index + 1)) {
+            if (hasSudokuSolved(charBoard, possiblePieces, index + 1)) {
                 return true;
             }
         }
@@ -85,16 +85,8 @@ int main(int argc, char **argv) {
     getBoardFromFile(argc, argv, board, possiblePieces);
 
     // Solve the Sudoku
-    if (solveSudoku(board, possiblePieces, 0)) {
-        for (int i = 0; i < 81; i++) {
-            if (i % 9 == 0 && i != 0) {
-                cout << "\n";
-            } else if (i != 0) {
-                cout << " ";
-            }
-            cout << board[i];
-        }
-        cout << "\n";
+    if (hasSudokuSolved(board, possiblePieces, 0)) {
+        printBoard(board);
     } else {
         cerr << "No solution found\n";
     }

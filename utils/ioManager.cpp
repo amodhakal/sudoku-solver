@@ -45,3 +45,15 @@ void getBoardFromFile(int argc, char **argv, char *board, vector<set<char>> &pos
     }
     fclose(file);
 }
+
+void printBoard(char *board) {
+    for (int i = 0; i < 81; i++) {
+        if (i % 9 == 0 && i != 0) {
+            cout << "\n";
+        } else if (i != 0) {
+            cout << " ";
+        }
+        cout << board[i];
+    }
+    cout << "\n";
+}
