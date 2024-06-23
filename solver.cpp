@@ -2,11 +2,13 @@
 #include <set>
 #include <vector>
 
+using namespace std;
+
 bool isValidPiece(char charBoard[], int index) {
     // Check row
     int row = index / 9;
     int startingRowIdx = row * 9;
-    std::set<char> rowChars;
+    set<char> rowChars;
     for (int rowIndex = startingRowIdx; rowIndex < startingRowIdx + 9; rowIndex++) {
         char ch = charBoard[rowIndex];
         if (ch == 'X' || ch == '\0')
@@ -19,7 +21,7 @@ bool isValidPiece(char charBoard[], int index) {
 
     // Check col
     int col = index % 9;
-    std::set<char> colChars;
+    set<char> colChars;
     for (int colIndex = col; colIndex < 81; colIndex += 9) {
         char ch = charBoard[colIndex];
         if (ch == 'X' || ch == '\0')
@@ -38,7 +40,7 @@ bool isValidPiece(char charBoard[], int index) {
                           startingIndex + 9,  startingIndex + 10, startingIndex + 11,
                           startingIndex + 18, startingIndex + 19, startingIndex + 20};
 
-    std::set<char> subChars;
+    set<char> subChars;
     for (int charIndex : indexesList) {
         char ch = charBoard[charIndex];
         if (ch == 'X' || ch == '\0')
@@ -52,7 +54,7 @@ bool isValidPiece(char charBoard[], int index) {
     return true;
 }
 
-bool solveSudoku(char charBoard[], std::vector<std::set<char>> &possiblePieces, int index) {
+bool solveSudoku(char charBoard[], vector<set<char>> &possiblePieces, int index) {
     if (index == 81) {
         return true;
     }
@@ -75,8 +77,6 @@ bool solveSudoku(char charBoard[], std::vector<std::set<char>> &possiblePieces, 
 }
 
 int main(int argc, char **argv) {
-    using namespace std;
-
     if (argc != 2) {
         cerr << "usage: ./solve [input-file]" << endl;
         return 1;
